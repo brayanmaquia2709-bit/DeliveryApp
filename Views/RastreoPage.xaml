@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DeliveryApp.Views.RastreoPage"
+             Title="{Binding Titulo}"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="*, Auto" Padding="20">
+
+        <VerticalStackLayout Grid.Row="0" VerticalOptions="Center" Spacing="25">
+
+            <!-- Icono Animado del Estado -->
+            <Border BackgroundColor="#FFEAA7" 
+                    StrokeShape="RoundRectangle 60" 
+                    WidthRequest="120" 
+                    HeightRequest="120" 
+                    HorizontalOptions="Center">
+                <Label Text="{Binding IconoEstado}" 
+                       FontSize="60" 
+                       HorizontalOptions="Center" 
+                       VerticalOptions="Center" />
+            </Border>
+
+            <!-- Título de Estado en Vivo -->
+            <VerticalStackLayout Spacing="8">
+                <Label Text="{Binding EstadoTexto}" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="#2D3436" 
+                       HorizontalOptions="Center" />
+
+                <Label Text="{Binding MensajeDetalle}" 
+                       FontSize="15" 
+                       TextColor="#636E72" 
+                       HorizontalOptions="Center" 
+                       HorizontalTextAlignment="Center" 
+                       Padding="20,0" />
+            </VerticalStackLayout>
+
+            <!-- BARRA DE PROGRESO EN TIEMPO REAL -->
+            <VerticalStackLayout Spacing="8" Padding="10,0">
+                <ProgressBar Progress="{Binding ProgresoPorcentaje}" 
+                             ProgressColor="#FF4757" 
+                             HeightRequest="12" />
+
+                <Grid ColumnDefinitions="*, *, *, *">
+                    <Label Grid.Column="0" Text="Recibido" FontSize="10" TextColor="#636E72" HorizontalOptions="Start" />
+                    <Label Grid.Column="1" Text="Cocina" FontSize="10" TextColor="#636E72" HorizontalOptions="Center" />
+                    <Label Grid.Column="2" Text="En camino" FontSize="10" TextColor="#636E72" HorizontalOptions="Center" />
+                    <Label Grid.Column="3" Text="Entregado" FontSize="10" TextColor="#636E72" HorizontalOptions="End" />
+                </Grid>
+            </VerticalStackLayout>
+
+            <!-- Tarjeta con Datos del Repartidor -->
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="15" Margin="0,15,0,0">
+                <Grid ColumnDefinitions="50, *, Auto">
+                    <Label Grid.Column="0" Text="👨🛵" FontSize="30" VerticalOptions="Center" />
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                        <Label Text="Carlos Ramírez" FontAttributes="Bold" TextColor="#2D3436" FontSize="15" />
+                        <Label Text="Repartidor asignado ⭐ 4.9" TextColor="#636E72" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Button Grid.Column="2" Text="📞 Llamar" BackgroundColor="#00B894" TextColor="White" CornerRadius="12" Padding="10,5" FontSize="12" />
+                </Grid>
+            </Border>
+
+        </VerticalStackLayout>
+
+        <!-- Botón Volver al Inicio -->
+        <Button Grid.Row="1" 
+                Text="Volver al Menú Principal 🏠" 
+                BackgroundColor="#FF4757" 
+                TextColor="White" 
+                FontAttributes="Bold" 
+                FontSize="16" 
+                CornerRadius="16" 
+                HeightRequest="50"
+                Command="{Binding VolverAlInicioCommand}" />
+    </Grid>
+</ContentPage>

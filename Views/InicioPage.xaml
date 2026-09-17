@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:DeliveryApp.Models"
+             xmlns:viewmodels="clr-namespace:DeliveryApp.ViewModels"
+             x:Class="DeliveryApp.Views.InicioPage"
+             Title="{Binding Titulo}"
+             BackgroundColor="#F8F9FA">
+
+    <Grid RowDefinitions="Auto, Auto, *">
+
+        <!-- 1. ENCABEZADO Y LOGO DE LA APP -->
+        <Border Grid.Row="0" 
+                BackgroundColor="#FF4757" 
+                Padding="20,15" 
+                StrokeShape="RoundRectangle 0,0,20,20">
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="FastBite Delivery 🚀" 
+                           FontSize="22" 
+                           FontAttributes="Bold" 
+                           TextColor="White" />
+                    <Label Text="¿Qué se te antoja comer hoy?" 
+                           FontSize="14" 
+                           TextColor="#FFEAA7" />
+                </VerticalStackLayout>
+
+                <Button Grid.Column="1" 
+                Text="🛒" 
+                FontSize="20" 
+                BackgroundColor="#FF6B81" 
+                TextColor="White" 
+                CornerRadius="20" 
+                WidthRequest="45" 
+                HeightRequest="45"
+                Command="{Binding VerCarritoCommand}" />
+
+
+
+                <!-- Icono de Carrito de Compras -->
+                <Button Grid.Column="1" 
+                        Text="🛒" 
+                        FontSize="20" 
+                        BackgroundColor="#FF6B81" 
+                        TextColor="White" 
+                        CornerRadius="20" 
+                        WidthRequest="45" 
+                        HeightRequest="45" />
+            </Grid>
+        </Border>
+
+        <!-- 2. SECCIÓN DE CATEGORÍAS (CARRUSEL HORIZONTAL) -->
+        <ScrollView Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    HorizontalScrollBarVisibility="Never" 
+                    Padding="15,15,15,5">
+            <CollectionView ItemsSource="{Binding Categorias}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Categoria">
+                        <Border StrokeShape="RoundRectangle 20" 
+                                Padding="15,10" 
+                                BackgroundColor="#FFFFFF">
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding EsSeleccionada}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="#FFEAA7" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:InicioViewModel}}, Path=SeleccionarCategoriaCommand}" 
+                                                      CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding Icono}" FontSize="18" VerticalOptions="Center" />
+                                <Label Text="{Binding Nombre}" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#2D3436" 
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <!-- 3. LISTA VERTICAL DE PLATILLOS (MENÚ) -->
+        <Grid Grid.Row="2" Margin="15,5,15,15">
+            <CollectionView ItemsSource="{Binding PlatosFiltrados}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="15" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Plato">
+                        <Border StrokeShape="RoundRectangle 16" 
+                                BackgroundColor="White" 
+                                Padding="12" 
+                                Stroke="Transparent">
+                            <Grid ColumnDefinitions="100, *" ColumnSpacing="12">
+
+                                <!-- Foto del Platillo -->
+                                <Image Grid.Column="0" 
+                                       Source="{Binding ImagenUrl}" 
+                                       Aspect="AspectFill" 
+                                       HeightRequest="90" 
+                                       WidthRequest="90" />
+
+                                <!-- Información del Platillo -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <Label Grid.Column="0" 
+                                               Text="{Binding Nombre}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" 
+                                               TextColor="#2D3436" />
+                                        <!-- Calificación / Estrellas -->
+                                        <Label Grid.Column="1" 
+                                               Text="{Binding Calificacion, StringFormat='⭐ {0}'}" 
+                                               FontSize="12" 
+                                               FontAttributes="Bold" 
+                                               TextColor="#E17055" />
+                                    </Grid>
+
+                                    <Label Text="{Binding Descripcion}" 
+                                           FontSize="12" 
+                                           TextColor="#636E72" 
+                                           MaxLines="2" 
+                                           LineBreakMode="TailTruncation" />
+
+                                    <Grid ColumnDefinitions="*, Auto" Margin="0,5,0,0">
+                                        <Label Grid.Column="0" 
+                                               Text="{Binding Precio, StringFormat='${0:N0}'}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold" 
+                                               TextColor="#FF4757" 
+                                               VerticalOptions="Center" />
+
+                                        <!-- Botón Agregar al Carrito -->
+                                        <Button Grid.Column="1" 
+                                                Text="+ Agregar" 
+                                                BackgroundColor="#FF4757" 
+                                                TextColor="White" 
+                                                FontSize="12" 
+                                                CornerRadius="12" 
+                                                Padding="12,6"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:InicioViewModel}}, Path=AgregarAlCarritoCommand}"
+                                                CommandParameter="{Binding .}" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
+</ContentPage>
